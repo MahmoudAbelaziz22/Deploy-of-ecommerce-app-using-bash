@@ -1,10 +1,11 @@
 # Introduction
 
-This is a sample e-commerce application built for learning purposes.
+This is a sample e-commerce application ,Here's how to deploy it on CentOS systems in two methods:
 
-Here's how to deploy it on CentOS systems:
+## 1- Manual way:
 
-## Deploy Pre-Requisites
+
+#### Deploy Pre-Requisites
 
 1. Install FirewallD
 
@@ -14,7 +15,7 @@ sudo service firewalld start
 sudo systemctl enable firewalld
 ```
 
-## Deploy and Configure Database
+#### Deploy and Configure Database
 
 1. Install MariaDB
 
@@ -66,7 +67,7 @@ mysql < db-load-script.sql
 ```
 
 
-## Deploy and Configure Web
+#### Deploy and Configure Web
 
 1. Install required packages
 
@@ -121,4 +122,36 @@ sudo sed -i 's/172.20.1.101/localhost/g' /var/www/html/index.php
 
 ```
 curl http://localhost
+```
+
+
+## 2- Automated way using bash:
+
+1. Clone this repo:
+
+```
+git clone https://github.com/MahmoudAbelaziz22/Deploy-of-ecommerce-app-using-bash.git
+```
+
+2. Open your Terminal inside the project directory, and add excution permission to deploy-ecommerce-app.sh file:
+
+```
+chmod +x deploy-ecommerce-app.sh
+```
+3. Run the script:
+
+
+```
+./deploy-ecommerce-app.sh
+```
+
+4. Test
+
+```
+curl http://localhost
+```
+or open this url in your browser
+
+```
+http://localhost
 ```
