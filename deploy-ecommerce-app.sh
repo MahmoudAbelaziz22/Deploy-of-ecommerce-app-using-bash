@@ -1,22 +1,19 @@
 #!/bin/sh
 
 #--------------------------------Functions-----------------------------------------------
-fuction print_colored() {
-  
+function print_colored() {
    case $1 in
-     "green") COLOR= "\033[0;32m" ;;
-     "red") COLOR= "\033[0;31m" ;;
+     "green") COLOR="\033[0;32m" ;;
+     "red") COLOR="\033[0;31m" ;;
      "*") COLOR="\033[0m"
-    esac 
+    esac
    echo -e "${COLOR} $2 ${NC}" 
 }
 
-fuction check_service_status() {
+function check_service_status() {
     service_name= $1
-
-    is_service_active=$(sudo systemctl is-active ${service_name})
-
-    if [ $is_service_active = "active" ]
+    is_service_active="$(sudo systemctl is-active ${service_name})"
+    if [ ${is_service_active}="active" ]
     then
        print_colored "green" "${service_name} Service is active."
     else
@@ -25,7 +22,7 @@ fuction check_service_status() {
     fi
 }
 
-fuction is_firewalld_rule_configured() {
+function is_firewalld_rule_configured() {
     firewall_ports=$(sudo firewall-cmd --list-all --zone=public |grep ports)
 
     port_number=$1
@@ -43,17 +40,19 @@ fuction is_firewalld_rule_configured() {
 #Install FirewallD
 print_colored "green" "Installing FirewallD....."
 sudo yum install -y firewalld
-sudo service firewalld start
+#sudo service firewalld start
+sudo systemctl start firewalld 
 sudo systemctl enable firewalld
 
 is_firewallD_active=$(sudo systemctl is-active firewalld)
 
-check_service_status firewalld
+check_service_status "firewalld"
 
 #Install MariaDB
 print_colored "green" "Installing MariaDB....."
 sudo yum install -y mariadb-server
-sudo service mariadb start
+#sudo service mariadb start
+sudo systemctl start mariadb
 sudo systemctl enable mariadb
 
 check_service_status mariadb
@@ -105,7 +104,8 @@ sudo sed -i 's/index.html/index.php/g' /etc/httpd/conf/httpd.conf
 
 #Start httpd
 print_colored "green" "Starting httpd....."
-sudo service httpd start
+#sudo service httpd start
+sudo systemctl start httpd 
 sudo systemctl enable httpd
 
 check_service_status httpd
